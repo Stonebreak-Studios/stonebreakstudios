@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Stonebreak Studios is an independent studio making online survival games. Our first, AfterCure, is in development, with a closed beta starting December 2026.">
+<meta property="og:title" content="Stonebreak Studios">
+<meta property="og:description" content="Stonebreak Studios is an independent studio making online survival games. Our first, AfterCure, is in development, with a closed beta starting December 2026.">
+<meta property="og:image" content="https://stonebreakstudios.com/sb-banner.jpg">
+<meta property="og:url" content="https://stonebreakstudios.com/">
+<link rel="icon" type="image/png" href="favicon.png">
+<title>Stonebreak Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one dark, stone-and-ember site; a sticky bar over five hash-routed pages, each opening on a full-bleed image band. */
+:root {
+  --ash: #0e0c0b;        /* page ground */
+  --soot: #171311;       /* raised panels */
+  --stone: #2b2520;      /* rules, borders */
+  --bone: #efe6dc;       /* text */
+  --dust: #a6978a;       /* quiet text */
+  --ember: #ff6a00;      /* Stonebreak orange, the one accent */
+  --ember-ink: #1a0b00;  /* text on ember */
+  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --max: 1120px;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body { background: var(--ash); color: var(--bone); font: 400 17px/1.6 var(--body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--ash); }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+.wrap { max-width: var(--max); margin-inline: auto; padding-left: var(--gutter-l); padding-right: var(--gutter-r); }
+
+/* Header */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--ash) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--stone); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 10px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand img { width: 40px; height: 40px; }
+.brand span { font: 800 22px/1 var(--display); letter-spacing: .04em; text-transform: uppercase; }
+.brand small { display: block; font: 500 10px/1 var(--mono); letter-spacing: .24em; color: var(--ember); margin-top: 3px; }
+nav { display: flex; gap: 4px; flex-wrap: wrap; }
+nav a { font: 700 15px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; color: var(--dust); padding: 10px 10px; border-bottom: 2px solid transparent; }
+nav a:hover { color: var(--bone); }
+nav a[aria-current="page"] { color: var(--bone); border-bottom-color: var(--ember); }
+
+/* Pages */
+.page[hidden] { display: none; }
+.band { position: relative; isolation: isolate; overflow: hidden; border-bottom: 1px solid var(--stone); }
+.band img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.band::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(14,12,11,.35) 0%, rgba(14,12,11,.55) 45%, var(--ash) 100%); }
+.band .wrap { padding-block: clamp(72px, 14vw, 160px) clamp(40px, 7vw, 72px); }
+.eyebrow { font: 500 12px/1.2 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--ember); margin: 0 0 14px; }
+h1, h2, h3 { font-family: var(--display); text-transform: uppercase; text-wrap: balance; margin: 0; }
+h1 { font-weight: 900; font-size: clamp(44px, 8.5vw, 104px); line-height: .92; letter-spacing: .005em; max-width: 14ch; }
+h2 { font-weight: 800; font-size: clamp(32px, 5vw, 56px); line-height: .95; }
+h3 { font-weight: 800; font-size: 24px; line-height: 1.05; letter-spacing: .02em; }
+.lede { font-size: clamp(18px, 2vw, 21px); max-width: 58ch; color: var(--bone); margin: 22px 0 0; }
+p { margin: 0; max-width: 65ch; }
+.quiet { color: var(--dust); }
+section.block { padding-block: clamp(48px, 8vw, 96px); border-bottom: 1px solid var(--stone); }
+.stack { display: grid; gap: 18px; }
+.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 5vw, 64px); align-items: start; }
+@media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
+
+/* Buttons */
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.btn { display: inline-flex; align-items: center; gap: 10px; font: 800 17px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; padding: 15px 22px; border: 2px solid var(--ember); cursor: pointer; background: none; color: var(--bone); }
+.btn.primary { background: var(--ember); color: var(--ember-ink); }
+.btn.primary:hover { background: #ff8326; border-color: #ff8326; }
+.btn:not(.primary):hover { background: rgba(255,106,0,.12); }
+.btn svg { width: 16px; height: 16px; }
+
+/* Status strip */
+.strip { background: var(--ember); color: var(--ember-ink); }
+.strip .wrap { display: flex; flex-wrap: wrap; gap: 6px 24px; align-items: baseline; padding-block: 14px; }
+.strip b { font: 800 18px/1.1 var(--display); letter-spacing: .1em; text-transform: uppercase; }
+.strip span { font-weight: 500; }
+
+/* Featured game */
+.feature { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); border: 1px solid var(--stone); background: var(--soot); }
+.feature figure { margin: 0; min-height: 320px; position: relative; }
+.feature figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 60%; }
+.feature .copy { padding: clamp(24px, 4vw, 44px); display: grid; gap: 16px; align-content: center; }
+.feature .title { font: 900 clamp(48px, 6vw, 76px)/.9 var(--display); text-transform: uppercase; letter-spacing: .01em; }
+@media (max-width: 820px) { .feature { grid-template-columns: 1fr; } .feature figure { min-height: 220px; } }
+
+/* Next project tile */
+.next { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: stretch; }
+.tile { border: 1px dashed #4a4038; background: repeating-linear-gradient(135deg, var(--soot) 0 14px, #141110 14px 28px); min-height: 220px; display: grid; place-content: center; text-align: center; padding: 24px; gap: 8px; }
+.tile b { font: 900 34px/1 var(--display); text-transform: uppercase; color: var(--dust); }
+.tile span { font: 500 12px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: #6f6257; }
+@media (max-width: 760px) { .next { grid-template-columns: 1fr; } }
+
+/* Feature list */
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0; border-top: 1px solid var(--stone); border-left: 1px solid var(--stone); }
+.features div { padding: 24px; border-right: 1px solid var(--stone); border-bottom: 1px solid var(--stone); display: grid; gap: 10px; align-content: start; }
+.features h3 { color: var(--bone); }
+.features p { color: var(--dust); }
+
+/* Field-notice style setting card */
+.notice { border: 1px solid var(--stone); background: var(--soot); padding: clamp(22px, 4vw, 36px); display: grid; gap: 14px; }
+.notice header { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 500 12px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--dust); border-bottom: 1px solid var(--stone); padding-bottom: 12px; }
+.notice header b { color: var(--ember); font-weight: 500; }
+.notice p { font-size: 19px; }
+
+/* Gallery placeholders */
+.gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.gallery .shot { aspect-ratio: 16 / 9; max-width: 100%; border: 1px dashed #4a4038; background: var(--soot); display: grid; place-content: center; font: 500 11px/1.4 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: #6f6257; text-align: center; padding: 8px; }
+.gallery .shot.wide { grid-column: span 3; aspect-ratio: 21 / 9; }
+@media (max-width: 640px) { .gallery { grid-template-columns: 1fr 1fr; } .gallery .shot.wide { grid-column: span 2; } }
+
+/* Lists */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: step; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 16px; padding-block: 18px; border-bottom: 1px solid var(--stone); align-items: baseline; }
+.steps li::before { content: counter(step); font: 900 44px/1 var(--display); color: var(--ember); }
+.ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.ticks li { padding-left: 26px; position: relative; }
+.ticks li::before { content: ""; position: absolute; left: 0; top: .62em; width: 12px; height: 2px; background: var(--ember); }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(24px, 4vw, 48px); }
+.cols h3 { margin-bottom: 16px; }
+
+/* Values */
+.values { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.values div { border-top: 3px solid var(--ember); padding-top: 16px; display: grid; gap: 8px; }
+
+/* Contact */
+.contact { display: grid; gap: 0; border-top: 1px solid var(--stone); }
+.contact .row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 6fr) auto; gap: 16px; align-items: center; padding-block: 20px; border-bottom: 1px solid var(--stone); }
+.contact .what { font: 800 20px/1.1 var(--display); text-transform: uppercase; letter-spacing: .06em; }
+.contact .where { font: 500 15px/1.4 var(--mono); overflow-wrap: anywhere; user-select: all; }
+.copy-btn { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; background: none; color: var(--dust); border: 1px solid var(--stone); padding: 9px 12px; cursor: pointer; }
+.copy-btn:hover { color: var(--bone); border-color: var(--dust); }
+@media (max-width: 640px) { .contact .row { grid-template-columns: 1fr; gap: 8px; } .copy-btn { justify-self: start; } }
+
+/* Footer */
+footer { padding-block: 48px 40px; color: var(--dust); font-size: 14px; }
+footer .wrap { display: grid; gap: 24px; }
+.foot-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: center; }
+.foot-top nav a { font-size: 14px; padding: 6px 8px; }
+.legal { font-size: 12.5px; line-height: 1.6; max-width: 90ch; color: #85776b; }
+.cta-band { background: var(--soot); border-block: 1px solid var(--stone); }
+.cta-band .wrap { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; padding-block: 32px; }
+.cta-band p { font: 800 clamp(22px, 3vw, 30px)/1.1 var(--display); text-transform: uppercase; letter-spacing: .03em; max-width: 30ch; }
+.cta-band .actions { margin-top: 0; }
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="Stonebreak Studios home">
+      <img src="sb-logo.png" alt="" width="40" height="40">
+      <div><span>Stonebreak</span><small>Studios</small></div>
+    </a>
+    <nav aria-label="Main">
+      <a href="#home">Home</a>
+      <a href="#aftercure">AfterCure</a>
+      <a href="#playtest">Playtest</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <div class="page" id="page-home">
+    <div class="band">
+      <img class="bg" src="sb-banner.jpg" alt="" style="object-position: 50% 35%">
+      <div class="wrap">
+        <p class="eyebrow">Independent game studio</p>
+        <h1>Survive what's left.</h1>
+        <p class="lede">Stonebreak Studios is an independent team making online survival games. Our first, AfterCure, drops you into an abandoned city with friends and very little else.</p>
+      </div>
+    </div>
+    <div class="strip">
+      <div class="wrap"><b>Closed beta · December 2026</b><span>Applications are open now on our Discord.</span></div>
+    </div>
+    <section class="block">
+      <div class="wrap">
+        <article class="feature">
+          <figure><img src="ac-city.jpg" alt="A lone survivor looks over an overgrown, flooded city at sunset."></figure>
+          <div class="copy">
+            <p class="eyebrow">Now in development</p>
+            <div class="title">AfterCure</div>
+            <p>An infection ended the world. Somewhere in the ruins is the cure. Wake up with nothing, team up with friends and find it before the city finds you.</p>
+            <div class="actions" style="margin-top:8px">
+              <a class="btn primary" href="#playtest">Apply for the beta</a>
+              <a class="btn" href="#aftercure">Learn more</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section class="block">
+      <div class="wrap next">
+        <div class="stack" style="align-content:center">
+          <p class="eyebrow">What's next</p>
+          <h2>More worlds to break.</h2>
+          <p class="quiet">AfterCure is our first game, not our last. When it's out, we'll start on the next one. Watch this space.</p>
+          <div class="actions"><a class="btn" data-discord href="#contact">Follow Stonebreak Studios on Discord</a></div>
+        </div>
+        <div class="tile" aria-label="Next project, coming later"><b>Next project</b><span>Coming later</span></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- AFTERCURE -->
+  <div class="page" id="page-aftercure" hidden>
+    <div class="band">
+      <img class="bg" src="ac-city.jpg" alt="" style="object-position: 30% 55%">
+      <div class="wrap">
+        <p class="eyebrow">AfterCure · Online co-op survival</p>
+        <h1 style="max-width:16ch">Somewhere in this city is the cure.</h1>
+        <p class="lede">Everything else in it wants you dead.</p>
+        <div class="actions">
+          <a class="btn primary" href="#playtest">Apply for the beta</a>
+          <a class="btn" data-discord href="#contact">Join the Stonebreak Studios Discord</a>
+        </div>
+      </div>
+    </div>
+    <section class="block">
+      <div class="wrap split">
+        <h2>Just get back before dark.</h2>
+        <div class="stack">
+          <p style="font-size:19px">The infection took the city in weeks. The labs went dark, the streets went quiet, and the people who were racing to stop it vanished with their work half done.</p>
+          <p class="quiet">You wake up on cold pavement with nothing: no supplies, no answers, only the rumour that someone got close to a cure before the end. Team up with friends, scavenge what the city left behind and push deeper every day.</p>
+        </div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="wrap stack" style="gap:28px">
+        <p class="eyebrow">What you do</p>
+        <div class="features">
+          <div><h3>A city left to rot</h3><p>Overgrown streets, stalled cars and silent towers, built in Unreal Engine 5.</p></div>
+          <div><h3>Survive together</h3><p>Host a game or join a friend's session and play in co-op.</p></div>
+          <div><h3>Scavenge everything</h3><p>Search buildings for resources and loot, and manage what you carry.</p></div>
+          <div><h3>Move like you mean it</h3><p>Vault fences and climb over obstacles to get where you need to go.</p></div>
+          <div><h3>Make your survivor</h3><p>Choose a face, hair, colours and clothes the first time you spawn.</p></div>
+          <div><h3>Find the cure</h3><p>Somewhere in the ruins are the answers the scientists never finished finding.</p></div>
+        </div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="wrap split">
+        <div class="stack">
+          <p class="eyebrow">The setting</p>
+          <h2>They called it the Fall.</h2>
+        </div>
+        <div class="notice">
+          <header><span>City notice · Quarantine zone</span><b>Status: lost</b></header>
+          <p>The Fall was the weeks when the infection spread faster than anyone could treat it. Now vines climb the towers, cars rust where they stopped, and the infected own the night.</p>
+          <p class="quiet" style="font-size:16px">Do not travel after dark. Shelter before sundown.</p>
+        </div>
+      </div>
+    </section>
+    <section class="block">
+      <div class="wrap stack" style="gap:24px">
+        <div class="stack" style="gap:10px">
+          <p class="eyebrow">Media</p>
+          <h2>From the city</h2>
+          <p class="quiet">In-game screenshots and a trailer arrive with the beta.</p>
+        </div>
+        <div class="gallery">
+          <div class="shot wide">Trailer · coming soon</div>
+          <div class="shot">Screenshot</div>
+          <div class="shot">Screenshot</div>
+          <div class="shot">Screenshot</div>
+        </div>
+      </div>
+    </section>
+    <section class="block" style="border-bottom:0">
+      <div class="wrap split">
+        <div class="stack"><p class="eyebrow">Status</p><h2>In development</h2></div>
+        <div class="stack">
+          <p style="font-size:19px">Closed beta testing begins December 2026 for approved playtesters.</p>
+          <div class="actions" style="margin-top:4px">
+            <a class="btn primary" href="#playtest">Apply for the beta</a>
+            <a class="btn" data-discord href="#contact">Join the Stonebreak Studios Discord</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PLAYTEST -->
+  <div class="page" id="page-playtest" hidden>
+    <div class="band">
+      <img class="bg" src="ac-city.jpg" alt="" style="object-position: 80% 70%">
+      <div class="wrap">
+        <p class="eyebrow">Closed beta · December 2026</p>
+        <h1>Help us break it before launch.</h1>
+        <p class="lede">AfterCure's closed beta starts in December 2026. We're looking for players who'll play hard, find what's broken and tell us what's fun and what isn't.</p>
+        <div class="actions"><a class="btn primary" data-discord href="#contact">Apply on Discord</a></div>
+      </div>
+    </div>
+    <section class="block">
+      <div class="wrap split">
+        <div class="stack"><p class="eyebrow">How to apply</p><h2>Three steps</h2></div>
+        <ol class="steps">
+          <li><p>Join the Stonebreak Studios Discord.</p></li>
+          <li><p>Find the playtester application and fill it in. It takes a few minutes.</p></li>
+          <li><p>We review every application and message you on Discord if you're in.</p></li>
+        </ol>
+      </div>
+    </section>
+    <section class="block" style="border-bottom:0">
+      <div class="wrap cols">
+        <div><h3>What testers get</h3>
+          <ul class="ticks">
+            <li>Early access to AfterCure builds before anyone else</li>
+            <li>A direct line to the team in private Discord channels</li>
+            <li>A say in what we change</li>
+          </ul>
+        </div>
+        <div><h3>What we ask</h3>
+          <ul class="ticks">
+            <li>Play the builds we send and report bugs in Discord</li>
+            <li>Keep beta builds and anything you see in them private until we say otherwise</li>
+            <li>A PC that meets the minimum specs, which we'll post before the beta</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="page" id="page-about" hidden>
+    <div class="band">
+      <img class="bg" src="sb-banner.jpg" alt="" style="object-position: 50% 60%">
+      <div class="wrap">
+        <p class="eyebrow">About Stonebreak</p>
+        <h1 style="max-width:16ch">A small studio building big, lonely worlds.</h1>
+        <p class="lede">Stonebreak Studios is an independent game studio. We make multiplayer games about surviving together: places that feel empty until your friends show up.</p>
+      </div>
+    </div>
+    <section class="block">
+      <div class="wrap split">
+        <div class="stack"><p class="eyebrow">How we work</p><h2>Break the ordinary.</h2></div>
+        <p style="font-size:19px">We're a small team, and everyone works on the game directly. One of us builds the world and the levels; another builds the systems you play with, like inventory and gameplay. Playtesters are part of the team too. We test early, listen in Discord and change things based on what you tell us.</p>
+      </div>
+    </section>
+    <section class="block" style="border-bottom:0">
+      <div class="wrap stack" style="gap:28px">
+        <p class="eyebrow">What we care about</p>
+        <div class="values">
+          <div><h3>Worlds worth exploring</h3><p class="quiet">Every street and building should feel like it had a life before you got there.</p></div>
+          <div><h3>Playing together</h3><p class="quiet">Our games are built for co-op first.</p></div>
+          <div><h3>Building in the open</h3><p class="quiet">We share progress and bring players in before launch, not after.</p></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="page" id="page-contact" hidden>
+    <section class="block" style="padding-top:clamp(64px,10vw,120px)">
+      <div class="wrap stack" style="gap:32px">
+        <div class="stack" style="gap:16px">
+          <p class="eyebrow">Contact</p>
+          <h1>Say hello.</h1>
+          <p class="lede">The fastest way to reach us is the Stonebreak Studios Discord. For press, business or anything else, email either of us directly.</p>
+        </div>
+        <div class="contact">
+          <div class="row">
+            <div class="what">Stonebreak Studios Discord <span class="quiet" style="font:500 13px/1.3 var(--mono);letter-spacing:.08em;display:block;margin-top:6px">Playtesting, feedback, bugs</span></div>
+            <div class="where" id="discord-where">Discord invite link coming soon</div>
+            <span></span>
+          </div>
+          <div class="row">
+            <div class="what">Evan <span class="quiet" style="font:500 13px/1.3 var(--mono);letter-spacing:.08em;display:block;margin-top:6px">World and level design</span></div>
+            <div class="where" id="evan-email">e.jerasa@stonebreakstudios.com</div>
+            <button class="copy-btn" type="button" data-copy="evan-email">Copy</button>
+          </div>
+          <div class="row">
+            <div class="what">Cory <span class="quiet" style="font:500 13px/1.3 var(--mono);letter-spacing:.08em;display:block;margin-top:6px">Gameplay and systems</span></div>
+            <div class="where" id="cory-email">c.tallman@stonebreakstudios.com</div>
+            <button class="copy-btn" type="button" data-copy="cory-email">Copy</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="cta-band">
+  <div class="wrap">
+    <p>Join the Stonebreak Studios Discord to follow development and get first word on playtests.</p>
+    <div class="actions"><a class="btn primary" data-discord href="#contact">Join the Stonebreak Studios Discord</a></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <a class="brand" href="#home" aria-label="Stonebreak Studios home"><img src="sb-logo.png" alt="" width="40" height="40"><div><span>Stonebreak</span><small>Studios</small></div></a>
+      <nav aria-label="Footer">
+        <a href="#home">Home</a><a href="#aftercure">AfterCure</a><a href="#playtest">Playtest</a><a href="#about">About</a><a href="#contact">Contact</a><a data-discord href="#contact">Discord</a>
+      </nav>
+    </div>
+    <p class="legal">© 2026 Stonebreak Studios. All rights reserved. AfterCure is in development; features may change. Unreal and Unreal Engine are trademarks or registered trademarks of Epic Games, Inc. Discord is a trademark of Discord Inc. All other trademarks belong to their owners.</p>
+  </div>
+</footer>
+
+<script>
+// Stonebreak Studios Discord, permanent invite. Empty = Discord buttons lead to the Contact page.
+const DISCORD_INVITE = "https://discord.gg/M4fYQdeMEg";
+
+const pages = ["home", "aftercure", "playtest", "about", "contact"];
+function show() {
+  const id = pages.includes(location.hash.slice(1)) ? location.hash.slice(1) : "home";
+  for (const p of pages) document.getElementById("page-" + p).hidden = p !== id;
+  document.querySelectorAll("nav a").forEach(a => {
+    if (a.getAttribute("href") === "#" + id && !a.hasAttribute("data-discord")) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  });
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", show);
+show();
+
+if (DISCORD_INVITE) {
+  document.querySelectorAll("[data-discord]").forEach(a => { a.href = DISCORD_INVITE; a.target = "_blank"; a.rel = "noopener"; });
+  const where = document.getElementById("discord-where");
+  where.textContent = DISCORD_INVITE.replace(/^https?:\/\//, "");
+}
+
+document.querySelectorAll("[data-copy]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const el = document.getElementById(btn.dataset.copy);
+    const done = () => { btn.textContent = "Copied"; setTimeout(() => btn.textContent = "Copy", 1600); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Selected"; };
+    try { navigator.clipboard.writeText(el.textContent).then(done, fallback); } catch (e) { fallback(); }
+  });
+});
+</script>
+</body>
+</html>
